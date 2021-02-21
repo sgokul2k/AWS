@@ -1,0 +1,110 @@
+---
+- name: provision stack
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_prompt:
+    - name: KeyName
+      prompt: "Which key needs to be used  "
+      private: no
+    - name: WordpressAdminPassword
+      prompt: "Give the wp password  "
+      private: no
+    - name: VPCiPsupernet
+      prompt: "Which supernet you want to use for VPC "
+      private: no
+    - name: SubA
+      prompt: "Which subnet you want to use as Subnet A (/24 under the VPC Subnet)  "
+      private: no
+    - name: SubB
+      prompt: "Which subnet you want to use as Subnet B (/24 under the VPC Subnet) "
+      private: no
+    - name: LBListenerPort
+      prompt: "Which port you need to configure as LB listening port "
+      private: no
+    - name: LBListenerProtocol
+      prompt: "Which protocol you need to configure as LB  "
+      private: no
+    - name: LBSGFromSegment
+      prompt: "Which Segments allowed to access LB  "
+      private: no
+    - name: LBSGFromPort
+      prompt: "Which source ports allowed to access LB  "
+      private: no
+    - name: LBSGToPort
+      prompt: "Which destination ports allowed to access LB "
+      private: no
+    - name: WebSGFromSegment
+      prompt: "Which Segments allowed to access WEB "
+      private: no
+    - name: WebSGFromPort
+      prompt: " Which source port allowed to access WEB  "
+      private: no
+    - name: WebSGToPort
+      prompt: "Which dest port allowed to access WEB  "
+      private: no
+    - name: DBSGFromPort
+      prompt: " Which source port allowed to access DB  "
+      private: no
+    - name: DBSGToPort
+      prompt: " Which DEST port allowed to access WEB "
+      private: no
+    - name: DBStorage
+      prompt: "DB DBStorage "
+      private: no
+    - name: DBFlavor
+      prompt: " Which flavor of DB instance needed  "
+      private: no
+    - name: DBName
+      prompt: " DB Instance name  "
+      private: no
+    - name: DBEngine
+      prompt: " Which DB Engine flavor needed "
+      private: no
+    - name: DBUsername
+      prompt: " DB username  "
+      private: no
+    - name: DBPassword
+      prompt: " DB password  "
+      private: no
+
+  tasks:
+
+  - name: Create SG
+    cloudformation:
+      aws_access_key : "AKIASQPUCNPWXMNPXBWM"
+      aws_secret_key : "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"
+      stack_name : "ansible-cloudformation-wp1"
+      state : present
+      region : eu-west-1
+      disable_rollback : true
+      template : wp_cft2.yml
+      template_parameters:
+        KeyName: "{{KeyName}}"
+        WordpressAdminPassword: "{{WordpressAdminPassword}}"
+        VPCiPsupernet: "{{VPCiPsupernet}}"
+        SubA: "{{SubA}}"
+        SubB: "{{SubB}}"
+        LBListenerPort: "{{LBListenerPort}}"
+        LBListenerProtocol: "{{LBListenerProtocol}}"
+        LBSGFromSegment: "{{LBSGFromSegment}}"
+        LBSGFromPort: "{{LBSGFromPort}}"
+        LBSGToPort: "{{LBSGToPort}}"
+        WebSGFromSegment: "{{WebSGFromSegment}}"
+        WebSGFromPort: "{{WebSGFromPort}}"
+        WebSGToPort: "{{WebSGToPort}}"
+        DBSGFromPort: "{{DBSGFromPort}}"
+        DBSGToPort: "{{DBSGToPort}}"
+        DBStorage: "{{DBStorage}}"
+        DBFlavor: "{{DBFlavor}}"
+        DBName: "{{DBName}}"
+        DBEngine: "{{DBEngine}}"
+        DBUsername: "{{DBUsername}}"
+        DBPassword: "{{DBPassword}}"
+         
+    register: stack1
+
+  - name: show stack outputs
+    debug:
+     msg : "My stack outputs are {{stack1}}"
