@@ -73,8 +73,8 @@
 
   - name: Create SG
     cloudformation:
-      aws_access_key : "AKIASQPUCNPWXMNPXBWM"
-      aws_secret_key : "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"
+      aws_access_key : "ABCABCABCABC"
+      aws_secret_key : "XYZXYZXYZXYZXYZXYZXYZXYZ"
       stack_name : "ansible-cloudformation-wp1"
       state : present
       region : eu-west-1
